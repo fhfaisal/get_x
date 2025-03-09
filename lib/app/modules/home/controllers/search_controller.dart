@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../domain/usecases/auth/search_usecase.dart';
@@ -7,8 +8,11 @@ class SearchBoxController extends GetxController {
 
   // Observable states
   final RxBool isLoading = false.obs;
+  final RxBool isTextEmpty = true.obs;
   final Rx<String?> errorMessage = Rx<String?>(null);
   final Rx<dynamic> searchData = Rx<dynamic>(null);
+
+  final searchText = TextEditingController().obs;
 
   SearchBoxController(this.searchUseCase);
 
@@ -25,11 +29,11 @@ class SearchBoxController extends GetxController {
     final result = await searchUseCase.search(values: values);
 
     result.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = failure.message;
         searchData.value = null;
       },
-          (success) {
+      (success) {
         errorMessage.value = null;
         searchData.value = success;
       },
@@ -43,5 +47,11 @@ class SearchBoxController extends GetxController {
   void clearSearch() {
     searchData.value = null;
     errorMessage.value = null;
+  }
+  void handleSearch(){
+    final query = searchText.value.text.trim();
+    if (query.isNotEmpty) {
+      search(text: query);
+    }
   }
 }

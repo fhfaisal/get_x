@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_x/app/modules/home/controllers/home_controller.dart';
 import 'package:get_x/app/modules/home/controllers/search_controller.dart';
+import 'package:get_x/app/modules/home/views/widgets/home_drawer.dart';
+import 'package:get_x/core/utils/constants/app_text.dart';
+import 'package:get_x/core/utils/helpers/helper_function.dart';
 
 import '../../../../core/utils/constants/sizes.dart';
 import '../../../../core/utils/debug/log_read.dart';
@@ -12,50 +15,30 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     SearchBoxController searchController = Get.find<SearchBoxController>();
-    final searchText = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home"),
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          Obx(()=> Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSizes.defaultSpace24),
             child: SizedBox(
-              width: 250, // Adjust width as needed
-              child: TextField(
-                controller: searchText,
+              width: 300,
+              child: TextFormField(
+                controller: searchController.searchText.value,
                 decoration: InputDecoration(
-                  hintText: "Search...",
-                  prefixIcon: const Icon(Icons.search),
+                  hintText: AppText.search,
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      searchText.clear();
-                      searchController.clearSearch(); // Clear search results
-                    },
+                    icon: const Icon(Icons.search),
+                    onPressed: () =>searchController.handleSearch(),
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
                 ),
               ),
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              final query = searchText.text.trim();
-              if (query.isNotEmpty) {
-                searchController.search(text: query);
-              }
-            },
-          ),
+          )),
         ],
       ),
+      drawer: HomeDrawer(),
       body: Obx(() {
         if (searchController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -66,7 +49,7 @@ class HomeView extends GetView<HomeController> {
         } else if (searchController.hasResults) {
           return SearchList(state: searchController.searchData.value);
         }
-        return const Center(child: Text('Start searching...'));
+        return const Center(child: Text(AppText.startSearching));
       }),
     );
   }
@@ -81,7 +64,7 @@ class SearchList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (state.category == null || state.category!.isEmpty) {
-      return const Center(child: Text('No results found', style: TextStyle(fontSize: 16)));
+      return const Center(child: Text(AppText.noResultFound, style: TextStyle(fontSize: 16)));
     }
 
     return Padding(
@@ -91,7 +74,7 @@ class SearchList extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: AppSizes.sm_8),
-            child: Text('Category', style: Theme.of(context).textTheme.headlineSmall!.apply(heightFactor: 1.5)),
+            child: Text(AppText.category, style: Theme.of(context).textTheme.headlineSmall!.apply(heightFactor: 1.5)),
           ),
           Expanded(
             child: ListView.builder(
@@ -108,7 +91,7 @@ class SearchList extends StatelessWidget {
               },
             ),
           ),
-          Text('Subcategory', style: Theme.of(context).textTheme.headlineSmall!.apply(heightFactor: 1.5)),
+          Text(AppText.subCategory, style: Theme.of(context).textTheme.headlineSmall!.apply(heightFactor: 1.5)),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(10),
