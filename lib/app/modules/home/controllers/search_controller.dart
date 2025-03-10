@@ -3,17 +3,22 @@ import 'package:get/get.dart';
 
 import '../../../domain/usecases/auth/search_usecase.dart';
 
-class SearchBoxController extends GetxController {
-  final SearchUseCase searchUseCase=SearchUseCase.instance;
+enum SearchState {
+  initial,
+  loading,
+  success,
+  error,
+}
 
-  // Observable states
-  final RxBool isLoading = false.obs;
-  final RxBool isTextEmpty = true.obs;
+class SearchBoxController extends GetxController {
+  final SearchUseCase searchUseCase = SearchUseCase.instance;
+
+  // Observable states using enum
+  final Rx<SearchState> state = SearchState.initial.obs;
   final Rx<String?> errorMessage = Rx<String?>(null);
   final Rx<dynamic> searchData = Rx<dynamic>(null);
 
   final searchText = TextEditingController().obs;
-
 
   Future<void> search({required String text}) async {
     Map<String, dynamic> values = {};
@@ -23,7 +28,7 @@ class SearchBoxController extends GetxController {
     values['catSubCat'] = null;
     values['business_name'] = null;
 
-    isLoading.value = true;
+    state.value = SearchState.loading;
 
     final result = await searchUseCase.search(values: values);
 
@@ -31,14 +36,13 @@ class SearchBoxController extends GetxController {
       (failure) {
         errorMessage.value = failure.message;
         searchData.value = null;
+        state.value = SearchState.error;
       },
       (success) {
-        errorMessage.value = null;
         searchData.value = success;
+        state.value = SearchState.success;
       },
     );
-
-    isLoading.value = false;
   }
 
   bool get hasResults => searchData.value != null;
@@ -46,8 +50,10 @@ class SearchBoxController extends GetxController {
   void clearSearch() {
     searchData.value = null;
     errorMessage.value = null;
+    state.value = SearchState.initial;
   }
-  void handleSearch(){
+
+  void handleSearch() {
     final query = searchText.value.text.trim();
     if (query.isNotEmpty) {
       search(text: query);

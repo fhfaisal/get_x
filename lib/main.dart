@@ -8,17 +8,31 @@ import 'app/modules/home/controllers/theme_controller.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
+  // Ensure Flutter is initialized
+  WidgetsFlutterBinding.ensureInitialized();
+
   // Initialize GetStorage
   await GetStorage.init();
 
   // Register ThemeController
   Get.put(ThemeController());
 
+  // // Initialize StorageService
+  // final StorageService storage = StorageService();
+  //
+  // // Check if user is logged in
+  // final bool isLoggedIn = storage.isLoggedIn();
+
+  // // Set initial route dynamically
+  // final String initialRoute = isLoggedIn ? Routes.HOME : Routes.AUTH;
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+
+  //MyApp({Key? key, required this.initialRoute}) : super(key: key);
+  MyApp({super.key});
 
   // Get the theme controller
   final ThemeController themeController = Get.find<ThemeController>();
@@ -31,7 +45,7 @@ class MyApp extends StatelessWidget {
       themeMode: themeController.themeMode,
       theme: AppTheme.lightTheme, // Your light theme
       darkTheme: AppTheme.darkTheme,
-      initialRoute: AppPages.INITIAL,
+      initialRoute: AppPages.INITIAL, // Set dynamically based on auth state
       getPages: AppPages.routes,
     );
   }

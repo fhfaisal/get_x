@@ -40,16 +40,27 @@ class HomeView extends GetView<HomeController> {
       ),
       drawer: HomeDrawer(),
       body: Obx(() {
-        if (searchController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (searchController.errorMessage.value != null) {
-          final errorMsg = searchController.errorMessage.value!;
-          logView(errorMsg);
-          return Center(child: Text(errorMsg, style: const TextStyle(color: Colors.red)));
-        } else if (searchController.hasResults) {
-          return SearchList(state: searchController.searchData.value);
+        final searchController = Get.find<SearchBoxController>();
+
+        switch (searchController.state.value) {
+          case SearchState.initial:
+            return const Center(child: Text(AppText.startSearching));
+
+          case SearchState.loading:
+            return const Center(child: CircularProgressIndicator());
+
+          case SearchState.success:
+            if (searchController.hasResults) {
+              return SearchList(state: searchController.searchData.value);
+            } else {
+              return const Center(child: Text(AppText.noResultFound));
+            }
+
+          case SearchState.error:
+            final errorMsg = searchController.errorMessage.value!;
+            logView(errorMsg);
+            return Center(child: Text(errorMsg, style: const TextStyle(color: Colors.red)));
         }
-        return const Center(child: Text(AppText.startSearching));
       }),
     );
   }
