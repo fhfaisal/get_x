@@ -20,6 +20,7 @@ dependencies:
   dartz: ^0.10.1
   get_storage: ^2.1.1 #A fast, extra light and synchronous key-value in memory, which backs up data to disk at each operation. It is written entirely in Dart and easily integrates with Get framework of Flutter.
   connectivity_plus: ^5.0.2 #This plugin allows Flutter apps to discover network connectivity types that can be used.
+  google_maps_flutter: ^2.10.1
 
 dev_dependencies:
   flutter_test:
