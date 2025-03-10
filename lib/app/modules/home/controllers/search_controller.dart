@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../../domain/usecases/auth/search_usecase.dart';
 
 class SearchBoxController extends GetxController {
-  final SearchUseCase searchUseCase;
+  final SearchUseCase searchUseCase=SearchUseCase.instance;
 
   // Observable states
   final RxBool isLoading = false.obs;
@@ -14,7 +14,6 @@ class SearchBoxController extends GetxController {
 
   final searchText = TextEditingController().obs;
 
-  SearchBoxController(this.searchUseCase);
 
   Future<void> search({required String text}) async {
     Map<String, dynamic> values = {};

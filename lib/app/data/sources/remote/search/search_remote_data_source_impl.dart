@@ -6,9 +6,8 @@ import '../../../models/search_model.dart';
 import 'search_remote_data_source.dart';
 
 class SearchRemoteDataSourceImpl implements SearchRemoteDataSource{
-  final DioClient _dioClient;
+  final DioClient _dioClient = DioClient.instant;
 
-  SearchRemoteDataSourceImpl(this._dioClient);
   
   @override
   Future<SearchModel> search({required Map<String,dynamic>values}) async {

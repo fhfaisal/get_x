@@ -23,33 +23,16 @@ class HomeBinding extends Bindings {
     Get.lazyPut<DioClient>(
       () => DioClient(), // Register this FIRST
     );
-    //  Get.lazyPut<AuthUseCase>(
-    //   () => AuthUseCase(Get.find<AuthRepository>()), // Register this FIRST
-    // );
-    
-
-    // Then register the data source with DioClient dependency
-    Get.lazyPut<SearchRemoteDataSource>(
-      () => SearchRemoteDataSourceImpl(Get.find<DioClient>()),
-    );
-
-    // Then register the repository
-    Get.lazyPut<SearchRepository>(
-      () => SearchRepositoryImpl(Get.find<SearchRemoteDataSource>()),
-    );
-
-    // Then register the SearchUseCase
-    Get.lazyPut<SearchUseCase>(
-      () => SearchUseCase(Get.find<SearchRepository>()),
-    );
-
     // Then register controllers that depend on it
     Get.lazyPut<HomeController>(
       () => HomeController(),
     );
 
     Get.lazyPut<SearchBoxController>(
-      () => SearchBoxController(Get.find<SearchUseCase>()),
+      () => SearchBoxController(),
+    );
+    Get.lazyPut<SearchUseCase>(
+      () => SearchUseCase(),
     );
   }
 }

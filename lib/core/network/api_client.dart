@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:get/get.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../error/exceptions.dart';
@@ -10,6 +11,7 @@ import 'api_constants.dart';
 
 /// API client with secure authentication, network handling, and pretty logging.
 class DioClient {
+  static DioClient get instant =>Get.find();
   late final Dio _dio;
 
   DioClient() {
@@ -48,7 +50,7 @@ class DioClient {
   }
 
   /// Handles API responses and checks for errors.
-  dynamic _handleResponse(Response response) {
+  dynamic _handleResponse(response) {
     switch (response.statusCode) {
       case 200:
         return response.data;
