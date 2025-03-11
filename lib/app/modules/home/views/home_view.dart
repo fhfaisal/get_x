@@ -7,12 +7,14 @@ import 'package:get_x/core/utils/constants/app_text.dart';
 import 'package:get_x/core/utils/helpers/helper_function.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../../core/utils/constants/enams.dart';
 import '../../../../core/utils/constants/sizes.dart';
 import '../../../../core/utils/debug/log_read.dart';
 import '../../../domain/entities/search_data.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
+
   @override
   Widget build(BuildContext context) {
     SearchBoxController searchController = Get.find<SearchBoxController>();
@@ -20,50 +22,74 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          Obx(()=> Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSizes.defaultSpace24),
-            child: SizedBox(
-              width: 300,
-              child: TextFormField(
-                controller: searchController.searchText.value,
-                decoration: InputDecoration(
-                  hintText: AppText.search,
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () =>searchController.handleSearch(),
+          Obx(() => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSizes.defaultSpace24),
+                child: SizedBox(
+                  width: 300,
+                  child: TextFormField(
+                    controller: searchController.searchText.value,
+                    decoration: InputDecoration(
+                      hintText: AppText.search,
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () => searchController.handleSearch(),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                    ),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
                 ),
-              ),
-            ),
-          )),
+              )),
         ],
       ),
       drawer: HomeDrawer(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Obx(() => Text(
+              controller.nearbyBusinessList.length.toString(),
+              style: TextStyle(color: Colors.red),
+            )),
+      ),
       body: SizedBox(
         height: Get.height,
         width: double.infinity,
-        child: GoogleMap(
-          onMapCreated: (controller) => GoogleMapController,
-          mapType: MapType.normal,
-          initialCameraPosition: CameraPosition(
-            target: LatLng(
-              41.850033,
-              -87.6500523,
+        child: Obx(
+          () => GoogleMap(
+            onMapCreated: (controller) => GoogleMapController,
+            mapType: MapType.normal,
+            onCameraIdle: controller.onCameraIdle,
+            markers: controller.markers,
+            initialCameraPosition: CameraPosition(
+              target: LatLng(
+                23.7752410,
+                90.3897040,
+              ),
+              zoom: 14.0,
             ),
-            zoom: 14.0,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: false,
+            zoomControlsEnabled: false,
+            compassEnabled: false,
+            mapToolbarEnabled: false,
+            scrollGesturesEnabled: true,
+            zoomGesturesEnabled: true,
+            rotateGesturesEnabled: false,
+            tiltGesturesEnabled: false,
           ),
-          myLocationEnabled: true,
-          myLocationButtonEnabled: false,
-          zoomControlsEnabled: false,
-          compassEnabled: false,
-          mapToolbarEnabled: false,
-          scrollGesturesEnabled: true,
-          zoomGesturesEnabled: true,
-          rotateGesturesEnabled: false,
-          tiltGesturesEnabled: false,
         ),
       ),
+      // body: Center(
+      //   child: Obx(() {
+      //     return ListView.builder(
+      //       itemCount: controller.nearbyBusinessList.length,
+      //       itemBuilder: (context, index) {
+      //         final business = controller.nearbyBusinessList[index];
+      //         return ListTile(
+      //           title: Text(business.businessName??'Empty'), // assuming CommonBusinessModel has a 'name' property
+      //         );
+      //       },
+      //     );
+      //   }),
+      // ),
     );
   }
 }
@@ -79,20 +105,20 @@ class SearchBox extends StatelessWidget {
       final searchController = Get.find<SearchBoxController>();
 
       switch (searchController.state.value) {
-        case SearchState.initial:
+        case AppStatus.initial:
           return const Center(child: Text(AppText.startSearching));
 
-        case SearchState.loading:
+        case AppStatus.loading:
           return const Center(child: CircularProgressIndicator());
 
-        case SearchState.success:
+        case AppStatus.success:
           if (searchController.hasResults) {
             return SearchList(state: searchController.searchData.value);
           } else {
             return const Center(child: Text(AppText.noResultFound));
           }
 
-        case SearchState.error:
+        case AppStatus.error:
           final errorMsg = searchController.errorMessage.value!;
           logView(errorMsg);
           return Center(child: Text(errorMsg, style: const TextStyle(color: Colors.red)));

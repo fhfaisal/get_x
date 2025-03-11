@@ -9,7 +9,8 @@ import 'package:get_x/app/modules/home/controllers/theme_controller.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../data/sources/remote/search/search_remote_data_source.dart';
 import '../../../data/sources/remote/search/search_remote_data_source_impl.dart';
-import '../../../domain/usecases/auth/search_usecase.dart';
+import '../../../domain/usecases/home/nearby_business_usecase.dart';
+import '../../../domain/usecases/home/search_usecase.dart';
 import '../controllers/home_controller.dart';
 import '../controllers/search_controller.dart';
 
@@ -33,6 +34,9 @@ class HomeBinding extends Bindings {
     );
     Get.lazyPut<SearchUseCase>(
       () => SearchUseCase(),
+    );
+    Get.lazyPut<NearbyBusinessUseCase>(
+      () => NearbyBusinessUseCase(),
     );
   }
 }

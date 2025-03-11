@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_x/core/utils/constants/enams.dart';
 
-import '../../../domain/usecases/auth/search_usecase.dart';
-
-enum SearchState {
-  initial,
-  loading,
-  success,
-  error,
-}
-
+import '../../../domain/usecases/home/search_usecase.dart';
 class SearchBoxController extends GetxController {
   final SearchUseCase searchUseCase = SearchUseCase.instance;
 
   // Observable states using enum
-  final Rx<SearchState> state = SearchState.initial.obs;
+  final Rx<AppStatus> state = AppStatus.initial.obs;
   final Rx<String?> errorMessage = Rx<String?>(null);
   final Rx<dynamic> searchData = Rx<dynamic>(null);
 
@@ -28,7 +21,7 @@ class SearchBoxController extends GetxController {
     values['catSubCat'] = null;
     values['business_name'] = null;
 
-    state.value = SearchState.loading;
+    state.value = AppStatus.loading;
 
     final result = await searchUseCase.search(values: values);
 
@@ -36,11 +29,11 @@ class SearchBoxController extends GetxController {
       (failure) {
         errorMessage.value = failure.message;
         searchData.value = null;
-        state.value = SearchState.error;
+        state.value = AppStatus.error;
       },
       (success) {
         searchData.value = success;
-        state.value = SearchState.success;
+        state.value = AppStatus.success;
       },
     );
   }
@@ -50,7 +43,7 @@ class SearchBoxController extends GetxController {
   void clearSearch() {
     searchData.value = null;
     errorMessage.value = null;
-    state.value = SearchState.initial;
+    state.value = AppStatus.initial;
   }
 
   void handleSearch() {
