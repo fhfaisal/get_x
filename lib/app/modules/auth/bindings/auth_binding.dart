@@ -19,18 +19,18 @@ class AuthBinding extends Bindings {
     Get.lazyPut<AuthLocalDataSource>(
           () => AuthLocalDataSourceImpl(),
     );
-    Get.lazyPut<AuthRemoteDataSource>(
-          () => AuthRemoteDataSourceImpl(Get.find<DioClient>()),
-    );
-    Get.lazyPut<AuthRepository>(
-          () => AuthRepositoryImpl(remoteDataSource: Get.find<AuthRemoteDataSource>(), localDataSource: Get.find<AuthLocalDataSource>()),
-    );
-
-    Get.lazyPut<AuthUseCase>(
-          () => AuthUseCase(Get.find<AuthRepository>()),
-    );
+    // Get.lazyPut<AuthRemoteDataSource>(
+    //       () => AuthRemoteDataSourceImpl(Get.find<DioClient>()),
+    // );
+    // Get.lazyPut<AuthRepository>(
+    //       () => AuthRepositoryImpl(remoteDataSource: Get.find<AuthRemoteDataSource>(), localDataSource: Get.find<AuthLocalDataSource>()),
+    // );
+    //
+    // Get.lazyPut<AuthUseCase>(
+    //       () => AuthUseCase(Get.find<AuthRepository>()),
+    // );
     Get.lazyPut<AuthController>(
-          () => AuthController(authUseCase:Get.find<AuthUseCase>()),
+          () => AuthController(),
     );
   }
 }

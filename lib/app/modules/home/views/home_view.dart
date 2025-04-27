@@ -49,47 +49,19 @@ class HomeView extends GetView<HomeController> {
               style: TextStyle(color: Colors.red),
             )),
       ),
-      body: SizedBox(
-        height: Get.height,
-        width: double.infinity,
-        child: Obx(
-          () => GoogleMap(
-            onMapCreated: (controller) => GoogleMapController,
-            mapType: MapType.normal,
-            onCameraIdle: controller.onCameraIdle,
-            markers: controller.markers,
-            initialCameraPosition: CameraPosition(
-              target: LatLng(
-                23.7752410,
-                90.3897040,
-              ),
-              zoom: 14.0,
-            ),
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            zoomControlsEnabled: false,
-            compassEnabled: false,
-            mapToolbarEnabled: false,
-            scrollGesturesEnabled: true,
-            zoomGesturesEnabled: true,
-            rotateGesturesEnabled: false,
-            tiltGesturesEnabled: false,
-          ),
-        ),
+      body: Center(
+        child: Obx(() {
+          return ListView.builder(
+            itemCount: controller.nearbyBusinessList.length,
+            itemBuilder: (context, index) {
+              final business = controller.nearbyBusinessList[index];
+              return ListTile(
+                title: Text(business.businessName??'Empty'), // assuming CommonBusinessModel has a 'name' property
+              );
+            },
+          );
+        }),
       ),
-      // body: Center(
-      //   child: Obx(() {
-      //     return ListView.builder(
-      //       itemCount: controller.nearbyBusinessList.length,
-      //       itemBuilder: (context, index) {
-      //         final business = controller.nearbyBusinessList[index];
-      //         return ListTile(
-      //           title: Text(business.businessName??'Empty'), // assuming CommonBusinessModel has a 'name' property
-      //         );
-      //       },
-      //     );
-      //   }),
-      // ),
     );
   }
 }

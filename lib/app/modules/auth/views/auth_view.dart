@@ -23,7 +23,7 @@ class AuthView extends GetView<AuthController> {
         // Listen for auth status changes
         if (controller.isAuthenticated) {
           Future.delayed(const Duration(milliseconds: 100), () {
-            Get.offAllNamed(Routes.HOME);
+            Get.offAllNamed(Routes.BOTTOM_NAVBAR);
           });
         } else if (controller.hasError) {
           SchedulerBinding.instance.addPostFrameCallback((_) {

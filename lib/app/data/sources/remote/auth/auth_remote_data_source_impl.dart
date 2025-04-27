@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/network/api_client.dart';
@@ -10,9 +12,9 @@ import 'auth_remote_data_source.dart';
 
 /// Concrete implementation of [AuthRemoteDataSource] using Dio.
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final DioClient _dioClient;
+  final DioClient _dioClient=Get.put(DioClient());
 
-  AuthRemoteDataSourceImpl(this._dioClient);
+  AuthRemoteDataSourceImpl();
 
   @override
   Future<UserModel> signIn({required String email, required String password}) async {

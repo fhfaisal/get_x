@@ -1,4 +1,7 @@
 
+import 'package:get/get.dart';
+import 'package:get_x/app/data/repositories/auth/auth_repository_impl.dart';
+
 import '../../../../core/error/failures.dart';
 import '../../entities/user.dart';
 import '../../repositories/auth/auth_repository.dart';
@@ -6,9 +9,9 @@ import '../../repositories/auth/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 
 class AuthUseCase {
-  final AuthRepository authRepository;
+  final AuthRepository authRepository=Get.put(AuthRepositoryImpl());
 
-  AuthUseCase(this.authRepository);
+  AuthUseCase();
 
   /// Signs in a user with the given [email] and [password].
   Future<Either<Failure, User>> signIn(String email, String password) {

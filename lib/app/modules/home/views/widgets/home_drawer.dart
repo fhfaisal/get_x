@@ -53,9 +53,9 @@ class HomeDrawer extends GetView<AuthController> {
             leading: const Icon(Icons.logout),
             title: Text("Logout"),
             onTap: () {
-              controller.storage.clearAllData();
+              //controller.storage.clearAllData();
               controller.signOut();
-              Get.offAll(Routes.AUTH);
+              Get.offAllNamed(Routes.AUTH);
             },
           ),
         ],

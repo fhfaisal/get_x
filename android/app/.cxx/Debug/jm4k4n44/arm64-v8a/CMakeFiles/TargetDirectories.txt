@@ -1,0 +1,2 @@
+/Users/faisalhasan/StudioProjects/get_x/android/app/.cxx/Debug/jm4k4n44/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/faisalhasan/StudioProjects/get_x/android/app/.cxx/Debug/jm4k4n44/arm64-v8a/CMakeFiles/rebuild_cache.dir

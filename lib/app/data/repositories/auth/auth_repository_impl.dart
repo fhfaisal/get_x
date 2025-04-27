@@ -1,4 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:get_x/app/data/sources/local/auth_local_data_source_impl.dart';
+import 'package:get_x/app/data/sources/remote/auth/auth_remote_data_source_impl.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/safe_api_call.dart';
@@ -9,13 +11,10 @@ import '../../sources/remote/auth/auth_remote_data_source.dart';
 
 /// Concrete implementation of [AuthRepository].
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource remoteDataSource;
-  final AuthLocalDataSource localDataSource;
+  final AuthRemoteDataSource remoteDataSource=AuthRemoteDataSourceImpl();
+  final AuthLocalDataSource localDataSource=AuthLocalDataSourceImpl();
 
-  AuthRepositoryImpl({
-    required this.remoteDataSource,
-    required this.localDataSource,
-  });
+  AuthRepositoryImpl();
 
   @override
   Future<Either<Failure, User>> signIn(String email, String password) async {

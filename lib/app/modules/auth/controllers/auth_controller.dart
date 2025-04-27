@@ -8,7 +8,7 @@ import '../../../domain/usecases/auth/auth_usecase.dart';
 /// [AuthController] is responsible for managing authentication state.
 /// It interacts with the [AuthUseCase] to perform sign in, sign up, and sign out operations.
 class AuthController extends GetxController {
-  final AuthUseCase authUseCase;
+  final AuthUseCase authUseCase=Get.put(AuthUseCase());
 
   // Observable state variables
   final Rx<AuthStatus> _status = AuthStatus.initial.obs;
@@ -35,11 +35,6 @@ class AuthController extends GetxController {
   bool get isAuthenticated => _status.value == AuthStatus.authenticated;
 
   bool get hasError => _status.value == AuthStatus.error;
-
-
-  /// The [authUseCase] is injected so that [AuthController] can communicate with
-  /// the data layer to perform authentication-related operations.
-  AuthController({required this.authUseCase});
 
   /// Attempts to sign in the user with the provided [email] and [password].
   /// Updates status to loading before starting the process and then either
