@@ -21,7 +21,7 @@ class DioClient {
       ..options.baseUrl = ApiConstants.baseUrl
       ..options.headers = {
         HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
-        HttpHeaders.authorizationHeader: 'Bearer ${''}',
+        //HttpHeaders.authorizationHeader: 'Bearer ${''}',
       }
       ..options.connectTimeout = const Duration(milliseconds: 15000)
       ..options.receiveTimeout = const Duration(milliseconds: 15000)

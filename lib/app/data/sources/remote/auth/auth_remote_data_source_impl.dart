@@ -21,7 +21,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await _dioClient.post(
         ApiConstants.login,
-        data: {"email": email, "password": password},
+        data: {"email": email.trim().toString(), "password": password.trim().toString()},
       );
       final model = UserModel.fromJson(response.data as Map<String, dynamic>);
       return model;
